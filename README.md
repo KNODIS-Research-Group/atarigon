@@ -41,10 +41,19 @@ enhancements in the Python typing module and other features.
    command:
     ```bash
     git clone https://github.com/KNODIS-Research-Group/atarigon.git
-    cd go-simulator
+    cd atarigon
+   ```
+2. Install the project dependencies using Poetry:
+    ```bash
+    poetry install
     ```
-2. No external dependencies are required outside the standard
+3. No external dependencies are required outside the standard
    Python library, making it straightforward to set up and run.
+
+It should be noted that the project uses the Poetry package manager for
+dependency management and packaging. If you don't have Poetry installed
+on your system, you can install it by following the instructions on the
+[official website](https://python-poetry.org/docs/).
 
 ### Running the simulation
 
@@ -52,9 +61,17 @@ Execute the simulator with the command below, replacing the
 angle-bracketed parameters with your desired settings:
 
 ```bash
-python main.py --size <board_size> \\
+poetry run python atarigon/main.py --size <board_size> \\
                --agents <path_to_agents_directory> \\
                --games <number_of_games>
+```
+
+For example, to run a simulation with a 9x9 board, using the agents
+located in the `agents` directory, and simulating 1000 games, you would
+run the following command:
+
+```bash
+poetry run python atarigon/main.py --size 9 --agents agents --games 1000
 ```
 
 Parameters:

@@ -135,7 +135,7 @@ def main():
     for player, score in sorted(
             kakunin.items(), key=lambda x: sum(x[1]), reverse=True
     ):
-        print(f'{str(player):<{longest_name}} | {sum(score):>6} | {score}')
+        print(f'{str(player):<{longest_name}} | {sum(score):>6}')
 
 
 if __name__ == '__main__':
