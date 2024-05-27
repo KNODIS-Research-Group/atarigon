@@ -1,0 +1,29 @@
+name: Release
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  publish:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.10.13]
+        poetry-version: [1.8.2]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Run image
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: 1.8.2
+      - name: Publish
+        env:
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          poetry config pypi-token.pypi $PYPI_TOKEN
+          poetry publish --build
