@@ -1,13 +1,15 @@
 [tool.poetry]
 name = "atarigon"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
-authors = ["blazaid <alberto.diaz@gmail.com>"]
+authors = ["blazaid <alber.diaz@proton.me>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
 
+[tool.poetry.scripts]
+atarigon = "atarigon.main:main"
 
 [build-system]
 requires = ["poetry-core"]
