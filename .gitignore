@@ -157,4 +157,4 @@ cython_debug/
 
 # Project specifics
 *.json
-#*.swp
+*.swp
