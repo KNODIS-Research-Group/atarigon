@@ -249,6 +249,23 @@ class Goban:
         # If the group has no liberties, is an auto-suicide move
         return len(kokyū_ten) == 0
 
+    def jishi_desu_ka(self, goshi: Goshi):
+        """Check if the player had no other choice than commit jishi.
+        :param goshi: The player making the move.
+        :return: True if the player had no other choice, False
+            otherwise.
+        """
+
+        # We check all the other empty spaces and try placing a stone
+        # there
+        for row in range(self.size):
+            for col in range(self.size):
+                if self.ban[row][col] is None and not self.jishi(Ten(row, col), goshi):
+                    # The player could have placed the stone in other tile
+                    return True
+        # The player would have died in any other tile
+        return False
+
     def print_board(self):
         """Prints the board to the console."""
         for row in self.ban:
