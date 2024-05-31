@@ -7,6 +7,12 @@ import sys
 from typing import Type, List
 
 from atarigon.api import Goshi, Goban
+from atarigon.exceptions import (
+    NotEnoughPlayersError,
+    SmallBoardError,
+    InvalidMoveError,
+    HikūtenError, KūtenError,
+)
 
 MIN_BOARD_SIZE = 9
 
@@ -40,17 +46,31 @@ def run_game(
         if ten is None:
             # If the player passes, it's added to the end of the list
             # and the next player is called
-            goshi.append(player)
+            shoshinsha.append(player)
             continue
 
         # Ok, is a movement. If it is invalid, the player is
         # disqualified and the next player is called
-        if not goban.seichō(ten, player):
-            shoshinsha.append(player)
+        try:
+            if not goban.seichō(ten, player):
+                shoshinsha.append(player)
+                continue
+        except (InvalidMoveError, HikūtenError):
+            # Before banning the player, we check if it had no other
+            # option but to suicide
+            if HikūtenError and not goban.jishi_desu_ka(player):
+                maketa.append(player)
+            else:
+                shoshinsha.append(player)
             continue
 
         # Stone is placed and captured players are removed from the game
-        captured = goban.place_stone(ten, player)
+        try:
+            captured = goban.place_stone(ten, player)
+        except (InvalidMoveError, HikūtenError):
+            shoshinsha.append(player)
+            continue
+        
         for captured_player in captured:
             # It maybe was an already captured player, so we check. If
             # not, the player score is incremented and the captured
@@ -66,9 +86,10 @@ def run_game(
 
     # Now we compute the scores based on the captured players and on
     # when and how they ended playing
+    print(f'Winner: {goshi[0].name}')
     for player in goshi:
         kakunin[player] += len(maketa) + len(shoshinsha)
-    for i, player in enumerate(reversed(maketa)):
+    for i, player in enumerate(maketa):
         kakunin[player] += i
     for player in shoshinsha:
         kakunin[player] = 0
